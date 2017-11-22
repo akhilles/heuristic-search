@@ -1,15 +1,15 @@
 import random
 
-COLUMNS = 16
-ROWS = 12
+COLUMNS = 32
+ROWS = 16
 
 SLOW_SPOTS = 8
 SLOW_RANGE = 31
 
-RIVERS = 4
+RIVERS = 3
 RIVER_LENGTH = 20
-DIR_CHANGE_LENGTH = 4
-DIR_CHANGE_PROB = 1.1
+DIR_CHANGE_LENGTH = 5
+DIR_CHANGE_PROB = 0.4
 
 NORTH = 0
 EAST = 1
@@ -28,9 +28,21 @@ def pickRiverStarts():
     points = random.sample(possiblePoints, RIVERS)
     return points
 
+def buildRivers(grid):
+    attempts = 0
 
-def buildRiver(r, c, d, grid):
-    riverGrid = [[0] * COLUMNS for i in range(ROWS)]
+    while True:
+        points = pickRiverStarts()
+        attempts += 1
+        riverSuccess = True
+        riverGrid = [[0] * COLUMNS for i in range(ROWS)]
+        for i in range(RIVERS):
+            riverSuccess = riverSuccess and buildRiver(points[i][0], points[i][1], points[i][2], grid, riverGrid)
+        if riverSuccess:
+            print(points)
+            return (riverGrid, attempts)
+
+def buildRiver(r, c, d, grid, riverGrid):
     totalLength = 0
     partialLength = 0
     while True:
@@ -42,7 +54,7 @@ def buildRiver(r, c, d, grid):
         totalLength += 1
 
         if partialLength == DIR_CHANGE_LENGTH:
-            partialLength = 1
+            partialLength = 0
             roll = random.uniform(0,1)
             if roll < DIR_CHANGE_PROB:
                 if d % 2 == 0: d = random.choice([1,3])
@@ -55,11 +67,11 @@ def buildRiver(r, c, d, grid):
 
         if r < 0 or c < 0 or r >= ROWS or c >= COLUMNS:
             if totalLength < RIVER_LENGTH: return False
-            else: return riverGrid
+            else: return True
             
 
 def addSlowTerrain(r, c, grid):
-    spread = (SLOW_RANGE-1) / 2
+    spread = (SLOW_RANGE-1) // 2
     spread = 2
     rowStart = max(0, r-spread)
     rowEnd = min(r+spread, ROWS-1)
@@ -86,14 +98,8 @@ def generate():
     return grid
 
 grid = generate()
-points = pickRiverStarts()
-
-riverSuccess = False
-
-while not riverSuccess:
-    riverGrid = buildRiver(points[0][0], points[0][1], points[0][2], grid)
-    if riverGrid: break
-
 printGrid(grid)
 print()
+riverGrid, attempts = buildRivers(grid)
 printGrid(riverGrid)
+print('attempts:', attempts)
