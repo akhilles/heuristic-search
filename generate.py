@@ -39,8 +39,15 @@ def buildRivers(grid):
         for i in range(RIVERS):
             riverSuccess = riverSuccess and buildRiver(points[i][0], points[i][1], points[i][2], grid, riverGrid)
         if riverSuccess:
-            print(points)
-            return (riverGrid, attempts)
+            break
+
+    for r in range(ROWS):
+        for c in range(COLUMNS):
+            if riverGrid[r][c] == 1:
+                grid[r][c] = chr(ord(grid[r][c][0]) + 48) + ''
+            print(str(grid[r][c]) + ' ', end='')
+        print()
+    return attempts
 
 def buildRiver(r, c, d, grid, riverGrid):
     totalLength = 0
@@ -100,6 +107,5 @@ def generate():
 grid = generate()
 printGrid(grid)
 print()
-riverGrid, attempts = buildRivers(grid)
-printGrid(riverGrid)
+attempts = buildRivers(grid)
 print('attempts:', attempts)
