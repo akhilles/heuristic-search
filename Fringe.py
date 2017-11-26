@@ -5,6 +5,7 @@ class Fringe():
     h = []
     def __init__(self):
         self.count = 0
+        self.h = []
 
     def insert(self, value, priority):
         heappush(self.h, (priority, self.count, value))
