@@ -49,7 +49,7 @@ if(__name__ == '__main__'):
     print(uc.search(grid,start,goal))
     print(uc.expandedCount)
     print(uc.pathCost)
-    uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
     print(astar.search(grid, start, goal, weight=1))
     print(astar.expandedCount)
     print(astar.pathCost)
