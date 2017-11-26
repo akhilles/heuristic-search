@@ -18,14 +18,18 @@ class AStarWeighted(AStar):
     def __init__(self, weight):
         super.__init__(super())
         self.w = weight
+        self.expandedCount = 0
 
 
 if(__name__ == '__main__'):
-    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/1-2.txt"))
+    fname = "benchmark-grids/1-2.txt"
+    grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
     astar = AStar()
     asw = AStarWeighted(2.5)
     print(uc.search(grid,start,goal))
+    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
     print(astar.search(grid, start, goal))
+    astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
     print(asw.search(grid, start, goal))
