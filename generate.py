@@ -17,7 +17,7 @@ EAST = 1
 SOUTH = 2
 WEST = 3
 
-NAME = '5'
+NAME = '1'
 
 
 def pickStartGoal(grid):
@@ -150,20 +150,27 @@ def generate():
     #print(slowCenters)
     #printGrid(grid)
 
-    for i in range(10):
+    for i in range(1):
         start, goal = pickStartGoal(grid)
         saveToFile(start, goal, slowCenters, grid, NAME+'-'+str(i+1))
 
     return grid
 
 def saveToFile(start, goal, slowCenters, grid, name):
-    f = open('benchmark-grids/' + name + '.txt','w')
+    f = open('grids/' + name + '.txt','w')
     f.write(str(start[0]) + ',' + str(start[1]))
     f.write('\n' + str(goal[0]) + ',' + str(goal[1]))
     for r,c in slowCenters:
         f.write('\n' + str(r) + ',' + str(c))
     for row in grid:
         f.write('\n' + ''.join(row))
+    for row in grid:
+        f.write('\n' + ','.join(row))
+    for row in grid:
+        f.write('\n' + ','.join(row))
+    for row in grid:
+        f.write('\n' + ','.join(row))
+    f.write('\n0,0,1,1,2,2,3,3,4,4,2,2,2')
     f.close()
 
 grid = generate()
