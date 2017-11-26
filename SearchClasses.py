@@ -19,6 +19,7 @@ class AStarWeighted(AStar):
     def __init__(self, weight):
         super.__init__(super())
         self.w = weight
+        self.expandedCount = 0
 
 def benchmark():
     gridNames = os.listdir("benchmark-grids")
@@ -35,15 +36,11 @@ def benchmark():
     print('average path length:', pathLength/50)
 
 if(__name__ == '__main__'):
-
-    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/4-7.txt"))
+    fname = "benchmark-grids/1-2.txt"
+    grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
     astar = AStar()
     asw = AStarWeighted(2.5)
     print(uc.search(grid,start,goal))
-    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/4-8.txt"))
-    print(uc.search(grid,start,goal))
-    #print(astar.search(grid, start, goal))
-    #print(asw.search(grid, start, goal))
-    #benchmark()
+    uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")

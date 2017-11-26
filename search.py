@@ -14,6 +14,11 @@ class BaseSearch:
         self.goal = None
         self.start = None
         self.parents = None
+        self.f = None
+        self.g = None
+        self.h = None
+        self.expandedCount = 0
+        self.path = None
 
     def search(self, grid, start, goal):
         self.grid= np.array(grid)
@@ -29,20 +34,29 @@ class BaseSearch:
         self.visited = np.zeros(grid.shape)
         visited = self.visited                         #1 if visited a position, 0 if not
         self.g = np.ones(grid.shape)*sys.maxsize
+        self.f = np.zeros(grid.shape)
+        f = self.f
+        self.h = np.zeros(grid.shape)
+        self.hGrid()
         g = self.g                                     #grid of g values (distance from start)
+        h = self.h
         fringe = self.fringe                           #just a priority queue
 
         g[start] = 0
         parents[start] = start
-        fringe.insert(start,g[start] + self.heuristic(start)*self.w)
+        fstart = g[start] + h[start]*self.w
+        f[start] = fstart
+        fringe.insert(start,fstart)
 
         while(not fringe.isEmpty()):
             s = fringe.pop()
             if(s==goal):
                 print('found')
-                return self.getPath()
+                self.path = self.getPath()
+                return self.path
             visited[s] = 1
             for sp in self.expand(s):
+                self.expandedCount +=1
                 if visited[sp]==0 and grid[sp]!='0':
                     self.updateVertex(s, sp)
         print('not found')
@@ -56,12 +70,21 @@ class BaseSearch:
             self.parents[sp] = s
             if(self.fringe.is_in(sp)):
                 self.fringe.remove(sp)
-            self.fringe.insert(sp, g[sp] + self.heuristic(sp)*self.w)
+            fval = g[sp] + self.h[sp]*self.w
+            self.f[sp] = fval
+            self.fringe.insert(sp, fval)
 
 
     #defines the heuristic for a given vertex
     def heuristic(self, v):
         pass
+
+    def hGrid(self):
+        h = self.h
+        for r,row in enumerate(h):
+            for c,col in enumerate(row):
+                h[r,c] = self.heuristic((r,c))*self.w
+
 
     #returns the successors to the input vertex as a list
     def expand(self, v):
@@ -115,6 +138,25 @@ class BaseSearch:
         path.insert(0,self.start)
 
         return path
+
+    def writeToFile(self, input, output):
+        grid,start,goal = generate.loadFromFile(input)
+        f = open(output, 'w+')
+
+        f.write(self.printGrid(self.f, f)+'\n')
+        f.write(self.printGrid(self.g, f)+'\n')
+        f.write(self.printGrid(self.h, f)+'\n')
+        f.write(','.join(str(x) for x in self.path)+'\n')
+        f.write(str(self.expandedCount))
+        f.close()
+
+
+
+    def printGrid(self, grid, file):
+        s = ''
+        for r in grid:
+            s+=(','.join(str(x) for x in r))
+        return s
 
 
 
