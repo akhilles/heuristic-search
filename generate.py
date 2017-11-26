@@ -17,6 +17,8 @@ EAST = 1
 SOUTH = 2
 WEST = 3
 
+NAME = '5'
+
 
 def pickStartGoal(grid):
     width = 5
@@ -117,7 +119,6 @@ def addBlockedTerrain(grid):
 
 def addSlowTerrain(r, c, grid):
     spread = (SLOW_RANGE-1) // 2
-    #spread = 2
     rowStart = max(0, r-spread)
     rowEnd = min(r+spread, ROWS-1)
     colStart = max(0, c-spread)
@@ -143,19 +144,20 @@ def generate():
         addSlowTerrain(r,c,grid)
     attempts = buildRivers(grid)
     addBlockedTerrain(grid)
-    start, goal = pickStartGoal(grid)
 
-    print(start)
-    print(goal)
-    print(slowCenters)
-    printGrid(grid)
+    #print(start)
+    #print(goal)
+    #print(slowCenters)
+    #printGrid(grid)
 
-    saveToFile(start, goal, slowCenters, grid)
+    for i in range(10):
+        start, goal = pickStartGoal(grid)
+        saveToFile(start, goal, slowCenters, grid, NAME+'-'+str(i+1))
 
     return grid
 
-def saveToFile(start, goal, slowCenters, grid):
-    f = open('grids\grid.txt','w')
+def saveToFile(start, goal, slowCenters, grid, name):
+    f = open('benchmark-grids/' + name + '.txt','w')
     f.write(str(start[0]) + ',' + str(start[1]))
     f.write('\n' + str(goal[0]) + ',' + str(goal[1]))
     for r,c in slowCenters:
