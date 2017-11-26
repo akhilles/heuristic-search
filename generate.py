@@ -169,7 +169,12 @@ def saveToFile(start, goal, slowCenters, grid, name):
 def loadFromFile(filename):
     f = open(filename,'r')
     ans = []
-    for r in f.readlines()[10:]:
+    allLines = f.readlines()
+    start = allLines[0].split(',')
+    start = (int(start[0]),int(start[1]))
+    goal = allLines[1].split(',')
+    goal = (int(goal[0]), int(goal[1]))
+    for r in allLines[10:]:
         a = []
         for c in r:
             if(c!='\n'):
@@ -177,7 +182,7 @@ def loadFromFile(filename):
         ans.append(a)
 
     f.close()
-    return ans
+    return ans, start, goal
 
 if __name__ == '__main__':
     a = loadFromFile("grids/test1.txt")
