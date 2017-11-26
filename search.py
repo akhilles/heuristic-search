@@ -19,12 +19,18 @@ class BaseSearch:
         self.h = None
         self.expandedCount = 0
         self.path = None
+        self.pathCost = 0
 
-    def search(self, grid, start, goal):
+    def search(self, grid, start, goal, weight=1):
         self.grid= np.array(grid)
         self.fringe = Fringe()
         self.goal = goal
         self.start = start
+        self.settings()
+        self.w = weight
+        self.expandedCount = 0
+        self.path = None
+        self.pathCost = 0
 
         #initialize stuff
         grid = self.grid                          #the main grid
@@ -134,29 +140,34 @@ class BaseSearch:
         s = self.goal
         while(s!=self.start):
             path.insert(0,s)
-            s = self.parents[s]
+            p = self.parents[s]
+            self.pathCost += self.points_cost(p,s)
+            s = p
         path.insert(0,self.start)
 
         return path
 
     def writeToFile(self, input, output):
         grid,start,goal = generate.loadFromFile(input)
-        f = open(output, 'w+')
+        file = open(output, 'w+')
 
-        f.write(self.printGrid(self.f, f)+'\n')
-        f.write(self.printGrid(self.g, f)+'\n')
-        f.write(self.printGrid(self.h, f)+'\n')
-        f.write(','.join(str(x) for x in self.path)+'\n')
-        f.write(str(self.expandedCount))
-        f.close()
+        file.write(self.printGrid(self.f, file)+'\n')
+        file.write(self.printGrid(self.g, file)+'\n')
+        file.write(self.printGrid(self.h, file)+'\n')
+        file.write(','.join(str(x) for x in self.path)+'\n')
+        file.write(str(self.expandedCount))
+        file.close()
 
 
 
     def printGrid(self, grid, file):
         s = ''
         for r in grid:
-            s+=(','.join(str(x) for x in r))
+            s+=(','.join(str(x) for x in r)+'\n')
         return s
+
+    def settings(self):
+        pass
 
 
 

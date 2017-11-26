@@ -2,6 +2,7 @@ from search import BaseSearch
 from math import sqrt
 import numpy as np
 import generate
+import math
 
 class UniformCost(BaseSearch):
 
@@ -19,17 +20,94 @@ class AStarWeighted(AStar):
         super.__init__(super())
         self.w = weight
         self.expandedCount = 0
+        self.pathCost = 0
+    # def settings(self, weight):
+    #     self.w = weight
+    #     self.expandedCount = 0
+    #     self.pathCost = 0
+
+
+class Manhattan(BaseSearch):
+
+    def heuristic(self,v):
+        return abs((v[0] - self.goal[0])) + abs((v[1] - self.goal[1]))
+
+def d2Heur(v, goal):
+    return sqrt((v[0] - goal[0]) ** 2 + (v[1] - goal[1]) ** 2)
+
 
 
 if(__name__ == '__main__'):
-    fname = "benchmark-grids/1-2.txt"
+    fname = "benchmark-grids/4-7.txt"
     grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
     astar = AStar()
-    asw = AStarWeighted(2.5)
+    asw = AStar()
+    man = Manhattan()
+
     print(uc.search(grid,start,goal))
+    print(uc.expandedCount)
+    print(uc.pathCost)
+    uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    print(astar.search(grid, start, goal, weight=1))
+    print(astar.expandedCount)
+    print(astar.pathCost)
+    # astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    print(asw.search(grid, start, goal, weight=2.5))
+    print(asw.expandedCount)
+    print(asw.pathCost)
+    # asw.writeToFile(fname, "grids/gridsol.txt")
+    print(man.search(grid, start, goal, weight=1))
+    print(man.expandedCount)
+    print(man.pathCost)
+
+    fname = "benchmark-grids/4-8.txt"
+    grid, start, goal = np.array(generate.loadFromFile(fname))
+
+    # uc = UniformCost()
+    # astar = AStar()
+    # asw = AStar()
+    # man = Manhattan()
+
+    print(uc.search(grid, start, goal))
+    print(uc.expandedCount)
+    print(uc.pathCost)
     # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
-    print(astar.search(grid, start, goal))
-    astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
-    print(asw.search(grid, start, goal))
+    print(astar.search(grid, start, goal, weight=1))
+    print(astar.expandedCount)
+    print(astar.pathCost)
+    # astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    print(asw.search(grid, start, goal, weight=2.5))
+    print(asw.expandedCount)
+    print(asw.pathCost)
+    # asw.writeToFile(fname, "grids/gridsol.txt")
+    print(man.search(grid, start, goal, weight=1))
+    print(man.expandedCount)
+    print(man.pathCost)
+
+    fname = "benchmark-grids/4-7.txt"
+    grid, start, goal = np.array(generate.loadFromFile(fname))
+
+    uc = UniformCost()
+    astar = AStar()
+    asw = AStarWeighted(2.5)
+    print(uc.search(grid, start, goal))
+    print(uc.expandedCount)
+    print(uc.pathCost)
+
+    fname = "benchmark-grids/4-8.txt"
+    grid, start, goal = np.array(generate.loadFromFile(fname))
+
+    uc = UniformCost()
+    astar = AStar()
+    asw = AStarWeighted(2.5)
+    print(uc.search(grid, start, goal))
+    print(uc.expandedCount)
+    print(uc.pathCost)
+    #
+    # fname = "benchmark-grids/4-8.txt"
+    # grid, start, goal = np.array(generate.loadFromFile(fname))
+    # print(uc.search(grid, start, goal))
+    #
+    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
