@@ -50,6 +50,7 @@ function displayCell(x, y, color) {
 }
 
 function displayGrid(start, end, centers, terrain) {
+    draw.clearRect(0, 0, canvas.width, canvas.height);
     terrain.forEach(function(row, y) {
         row.forEach(function(type, x) {
             color = '#686868'
