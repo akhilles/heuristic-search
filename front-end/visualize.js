@@ -28,14 +28,15 @@ function process(event) {
         for (i = 130; i < 250; i++){
             f.push(rows[i].split(','))
         }
-        for (i = 250; i < 370; i++){
+        for (i = 251; i < 371; i++){
             g.push(rows[i].split(','))
         }
-        for (i = 370; i < 490; i++){
+        for (i = 372; i < 492; i++){
             h.push(rows[i].split(','))
         }
 
-        path = rows[490].split(',').map(Number)
+        path = rows[493]
+        path = path.substring(1,path.length-1).split('),(')
         displayPath(start, path)
     }
 }
@@ -67,21 +68,12 @@ function displayGrid(start, end, centers, terrain) {
 }
 
 function displayPath(start, path) {
-    x = start[1]
-    y = start[0]
     console.log(path)
-    path.forEach(function(val) {
-        switch(val) {
-            case 0: y--; break;
-            case 1: x++; y--; break;
-            case 2: x++; break;
-            case 3: x++; y++; break;
-            case 4: y++; break;
-            case 5: x--; y++; break;
-            case 6: x--; break;
-            case 7: x--; y--; break;
+    path.forEach(function(val, index) {
+        if (index != 0){
+            coords = val.split(', ')
+            displayCell(coords[1],coords[0],'red')
         }
-        displayCell(x,y,'red')
     })
 }
 
@@ -97,13 +89,14 @@ function updateFGH(event) {
         document.getElementById("h").innerHTML = h[r][c]
     }
 
-    console.log(r,c)
+    //console.log(r,c)
 }
 
 window.onload = function() {
     canvas = document.getElementById("grid")
     canvas.addEventListener('mousemove', updateFGH)
     draw = canvas.getContext("2d")
+    draw.globalAlpha = 0.7
     draw.lineWidth = 0.1
     document.getElementById("gridSelect").addEventListener('change', process, false)
 }

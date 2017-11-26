@@ -37,18 +37,16 @@ def d2Heur(v, goal):
     return sqrt((v[0] - goal[0]) ** 2 + (v[1] - goal[1]) ** 2)
 
 
-def benchmark():
+def benchmark(searchClass):
     gridNames = os.listdir("benchmark-grids")
     pathLength = 0
-    do = ['4-7.txt', '4-8.txt']
+    expandedNodes = 0
     for name in gridNames:
-        if name not in do:
-            continue
-        astar = UniformCost()
         print(name + ': ', end='')
         grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/" + name))
-        path = astar.search(grid, start, goal)
+        path = searchClass.search(grid, start, goal)
         pathLength += len(path)
+        expandedNodes += searchClass.expandedNodes
     print('average path length:', pathLength/50)
 
 if(__name__ == '__main__'):
@@ -88,7 +86,7 @@ if(__name__ == '__main__'):
     print(uc.search(grid, start, goal))
     print(uc.expandedCount)
     print(uc.pathCost)
-    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+     # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
     print(astar.search(grid, start, goal, weight=1))
     print(astar.expandedCount)
     print(astar.pathCost)
