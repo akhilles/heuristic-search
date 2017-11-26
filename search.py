@@ -66,7 +66,7 @@ class BaseSearch:
                 if visited[sp]==0 and grid[sp]!='0':
                     self.updateVertex(s, sp)
         print('not found')
-        return parents
+        return self.path
 
 
     def updateVertex(self, s, sp):
@@ -147,10 +147,11 @@ class BaseSearch:
 
         return path
 
-    def writeToFile(self, input, output):
+    def writeToFile(self, input):
         grid,start,goal = generate.loadFromFile(input)
-        file = open(output, 'w+')
+        file = open(input, 'a')
 
+        file.write('\n')
         file.write(self.printGrid(self.f, file)+'\n')
         file.write(self.printGrid(self.g, file)+'\n')
         file.write(self.printGrid(self.h, file)+'\n')

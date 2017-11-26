@@ -52,7 +52,7 @@ def benchmark():
     print('average path length:', pathLength/50)
 
 if(__name__ == '__main__'):
-    fname = "benchmark-grids/4-7.txt"
+    fname = "grids/1-1.txt"
     grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
@@ -64,7 +64,7 @@ if(__name__ == '__main__'):
 
     print(uc.expandedCount)
     print(uc.pathCost)
-    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    uc.writeToFile(fname)
     print(astar.search(grid, start, goal, weight=1))
     print(astar.expandedCount)
     print(astar.pathCost)
@@ -76,50 +76,6 @@ if(__name__ == '__main__'):
     print(man.search(grid, start, goal, weight=1))
     print(man.expandedCount)
     print(man.pathCost)
-
-    fname = "benchmark-grids/4-8.txt"
-    grid, start, goal = np.array(generate.loadFromFile(fname))
-
-    # uc = UniformCost()
-    # astar = AStar()
-    # asw = AStar()
-    # man = Manhattan()
-
-    print(uc.search(grid, start, goal))
-    print(uc.expandedCount)
-    print(uc.pathCost)
-    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
-    print(astar.search(grid, start, goal, weight=1))
-    print(astar.expandedCount)
-    print(astar.pathCost)
-    # astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
-    print(asw.search(grid, start, goal, weight=2.5))
-    print(asw.expandedCount)
-    print(asw.pathCost)
-    # asw.writeToFile(fname, "grids/gridsol.txt")
-    print(man.search(grid, start, goal, weight=1))
-    print(man.expandedCount)
-    print(man.pathCost)
-
-    fname = "benchmark-grids/4-7.txt"
-    grid, start, goal = np.array(generate.loadFromFile(fname))
-
-    uc = UniformCost()
-    astar = AStar()
-    asw = AStarWeighted(2.5)
-    print(uc.search(grid, start, goal))
-    print(uc.expandedCount)
-    print(uc.pathCost)
-
-    fname = "benchmark-grids/4-8.txt"
-    grid, start, goal = np.array(generate.loadFromFile(fname))
-
-    uc = UniformCost()
-    astar = AStar()
-    asw = AStarWeighted(2.5)
-    print(uc.search(grid, start, goal))
-    print(uc.expandedCount)
-    print(uc.pathCost)
     #
     # fname = "benchmark-grids/4-8.txt"
     # grid, start, goal = np.array(generate.loadFromFile(fname))
