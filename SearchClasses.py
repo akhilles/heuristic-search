@@ -1,5 +1,6 @@
 from search import BaseSearch
 from math import sqrt
+import os
 import numpy as np
 import generate
 
@@ -19,13 +20,30 @@ class AStarWeighted(AStar):
         super.__init__(super())
         self.w = weight
 
+def benchmark():
+    gridNames = os.listdir("benchmark-grids")
+    pathLength = 0
+    do = ['4-7.txt', '4-8.txt']
+    for name in gridNames:
+        if name not in do:
+            continue
+        astar = UniformCost()
+        print(name + ': ', end='')
+        grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/" + name))
+        path = astar.search(grid, start, goal)
+        pathLength += len(path)
+    print('average path length:', pathLength/50)
 
 if(__name__ == '__main__'):
-    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/1-2.txt"))
+
+    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/4-7.txt"))
 
     uc = UniformCost()
     astar = AStar()
     asw = AStarWeighted(2.5)
     print(uc.search(grid,start,goal))
-    print(astar.search(grid, start, goal))
-    print(asw.search(grid, start, goal))
+    grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/4-8.txt"))
+    print(uc.search(grid,start,goal))
+    #print(astar.search(grid, start, goal))
+    #print(asw.search(grid, start, goal))
+    #benchmark()
