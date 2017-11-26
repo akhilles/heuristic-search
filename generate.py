@@ -1,20 +1,46 @@
 import random
+import math
 
-COLUMNS = 32
-ROWS = 16
+COLUMNS = 160
+ROWS = 120
 
 SLOW_SPOTS = 8
 SLOW_RANGE = 31
 
-RIVERS = 3
-RIVER_LENGTH = 20
-DIR_CHANGE_LENGTH = 5
+RIVERS = 4
+RIVER_LENGTH = 100
+DIR_CHANGE_LENGTH = 20
 DIR_CHANGE_PROB = 0.4
 
 NORTH = 0
 EAST = 1
 SOUTH = 2
 WEST = 3
+
+
+def pickStartGoal(grid):
+    width = 5
+    minDist = 100
+
+    possiblePoints = []
+    for r in range(ROWS):
+        for c in range(COLUMNS):
+            if grid[r][c] != '0' and (r < width or c < width or r >= (ROWS-width) or c >= (COLUMNS-width)):
+                possiblePoints.append((r,c))
+    
+    points = random.sample(possiblePoints, len(possiblePoints))
+
+    r1,c1 = points[0]
+    r2,c2 = points[1]
+
+    index = 1
+    while math.sqrt((r2-r1)**2 + (c2-c1)**2) < minDist:
+        #print('FAIL')
+        index += 1
+        r2,c2 = points[index]
+    
+    return ((r1,c1),(r2,c2))
+
 
 def pickRiverStarts():
     possiblePoints = []
@@ -45,8 +71,8 @@ def buildRivers(grid):
         for c in range(COLUMNS):
             if riverGrid[r][c] == 1:
                 grid[r][c] = chr(ord(grid[r][c][0]) + 48) + ''
-            print(str(grid[r][c]) + ' ', end='')
-        print()
+            #print(str(grid[r][c]) + ' ', end='')
+        #print()
     return attempts
 
 def buildRiver(r, c, d, grid, riverGrid):
@@ -75,11 +101,23 @@ def buildRiver(r, c, d, grid, riverGrid):
         if r < 0 or c < 0 or r >= ROWS or c >= COLUMNS:
             if totalLength < RIVER_LENGTH: return False
             else: return True
-            
+
+
+def addBlockedTerrain(grid):
+    possiblePoints = []
+
+    for r in range(ROWS):
+        for c in range(COLUMNS):
+            if grid[r][c] == '1' or grid[r][c] == '2':
+                possiblePoints.append((r,c))
+    
+    points = random.sample(possiblePoints, int(ROWS * COLUMNS * 0.2))
+    for r,c in points:
+        grid[r][c] = '0'
 
 def addSlowTerrain(r, c, grid):
     spread = (SLOW_RANGE-1) // 2
-    spread = 2
+    #spread = 2
     rowStart = max(0, r-spread)
     rowEnd = min(r+spread, ROWS-1)
     colStart = max(0, c-spread)
@@ -97,15 +135,33 @@ def printGrid(grid):
 def generate():
     grid = [['1'] * COLUMNS for i in range(ROWS)]
     points = random.sample(range(ROWS*COLUMNS), SLOW_SPOTS)
+    slowCenters = []
     for point in points:
         r = point // COLUMNS
         c = point % COLUMNS
-        print(r,c)
+        slowCenters.append((r,c))
         addSlowTerrain(r,c,grid)
+    attempts = buildRivers(grid)
+    addBlockedTerrain(grid)
+    start, goal = pickStartGoal(grid)
+
+    print(start)
+    print(goal)
+    print(slowCenters)
+    printGrid(grid)
+
+    saveToFile(start, goal, slowCenters, grid)
+
     return grid
 
+def saveToFile(start, goal, slowCenters, grid):
+    f = open('grids\grid.txt','w')
+    f.write(str(start[0]) + ',' + str(start[1]))
+    f.write('\n' + str(goal[0]) + ',' + str(goal[1]))
+    for r,c in slowCenters:
+        f.write('\n' + str(r) + ',' + str(c))
+    for row in grid:
+        f.write('\n' + ''.join(row))
+    f.close()
+
 grid = generate()
-printGrid(grid)
-print()
-attempts = buildRivers(grid)
-print('attempts:', attempts)

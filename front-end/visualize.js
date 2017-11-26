@@ -1,4 +1,4 @@
-cellSize = 20
+cellSize = 7
 
 function process(event) {
     file = event.target.files[0];
@@ -18,11 +18,12 @@ function process(event) {
             centers.push(rows[i].split(',').map(Number))
         }
 
-        for (i = 10; i < 30; i++){
+        for (i = 10; i < rows.length; i++){
             terrain.push(rows[i].split(''))
         }
 
         console.log(start)
+        console.log(end)
         console.log(centers)
         console.log(terrain)
 
@@ -39,23 +40,25 @@ function displayCell(x, y, color) {
 }
 
 function displayGrid(start, end, centers, terrain) {
-
     terrain.forEach(function(row, y) {
         row.forEach(function(type, x) {
-            color = 'black'
+            color = '#686868'
             switch(type) {
                 case '1': color = 'white'; break;
-                case '2': color = 'grey'; break;
-                case 'a': color = 'teal'; break;
-                case 'b': color = 'blue'; break;
+                case '2': color = '#d6d6d6'; break;
+                case 'a': color = '#4f92ff'; break;
+                case 'b': color = '#1d3660'; break;
             }
             displayCell(x,y,color)
         })
     })
+
+    displayCell(start[1], start[0], 'green')
+    displayCell(end[1], end[0], 'red')
 }
 
 window.onload = function() {
     draw = document.getElementById("grid").getContext("2d")
-    draw.lineWidth = 0.5
+    draw.lineWidth = 0.1
     document.getElementById("gridSelect").addEventListener('change', process, false)
 }
