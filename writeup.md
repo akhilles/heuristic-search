@@ -11,17 +11,28 @@
 `SearchClasses.py` has the various instantiations of it
 
 ## c)
+The implementation was optimized by using grids with O(1) efficiency instead of iterating
+through a list of the vertices. Grids were used to implement the closed list, so looking up
+if a vertex was alread visited is simply a random acces call to the grid: grid[vertex]. The
+g values were also held in a grid with default values set to pythons maximum integer value.
 
 
 ## d)
 
-**Best admissible/consistent heuristic:**
+**Best admissible/consistent heuristic:** To implement an admissible/consistent heuristic, we used a variation of the Manhattan
+distance. The heuristic simply divides the Manhattan distance by 4 in order to simulate the best case
+senario in which the goal and start vertices are directly connected by a highway. This makes the heuristic consistent
+since h(s') + c(s,s') will never be lower than h(s).
 
 **Manhattan:** Manhattan distance from the point to the goal
 
-**Custom1:**
+**Custom1:** This heuristic weights the two components of the manhattan distance to account for the possibility of highways.
+It multiplies the difference in the row numbers of the start and goal vertices by the number of rows and dides everything by 
+(number of rows + number of columns). It does the same with columns.
 
-**Custom2:**
+**Custom2:** This is similar to custom1 but instead of scaling the components of the Manhattan distance,
+it scales the components of the euclidean distance. As can be seen, this heuristic along with custom1 perform
+very well, trading off a small amount of cost, while considerably lowering the number of expansions.
 
 **Custom3:** Maximum of distance from goal in the x-axis and distance from goal in the y-axis
 
@@ -132,7 +143,16 @@ average visited/optimum: 1.077040049702986
 ```
 
 ## f)
-
+Uniform search is of course the slowest of the algorithms since it is unguided
+by any heuristic, but it always returns the optimal path. The admissible heuristic we used
+will also alwyas return the optimal path, and it does so while exapanding fewer vertices.
+The reduction in the number of vertices expanded is more than 20% lower. But by increasing the
+weight to 1.5, the weighted search cuts down the number of expanded nodes by 65% compared to
+uniform cost search. But the increase in cost is a negligible ~3%. The Manhattan heuristic
+is the fastest search with A* that averages a decent path cost of 140 with only 7400 nodes expanded.
+However, the custom2 heuristic performs very well with A*, tieing with the admissible heuristic
+weighted at 1.5. Custom1 performs similarly, but slightly worse. The Custom3 heuristic also works very well
+with A*, but is very unoptimal with the weighted search.
 
 ## g)
 
