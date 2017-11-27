@@ -57,7 +57,7 @@ class BaseSearch:
         while(not fringe.isEmpty()):
             s = fringe.pop()
             if(s==goal):
-                print('found')
+                #print('found')
                 self.path = self.getPath()
                 return self.path
             visited[s] = 1

@@ -63,7 +63,7 @@ def benchmark(searchClass, weight=1):
     visitedOptimum = 0
     startTime = time.time()
     for name in gridNames:
-        print(name + ': ', end='')
+        #print(name + ': ', end='')
         grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/" + name))
         instance = searchClass()
         path = instance.search(grid, start, goal, weight=weight)
@@ -72,58 +72,19 @@ def benchmark(searchClass, weight=1):
         pathCost += instance.pathCost
         expandedNodes += instance.expandedCount
     endTime = time.time()
+    
+    print('-', searchClass.__name__ + ',', 'w:', weight)
     print('average path cost:      ', pathCost/50)
     print('average expanded nodes: ', expandedNodes/50)
     print('average run time:       ', (endTime-startTime)/50)
     print('average visited/optimum:', visitedOptimum/50)
 
 if(__name__ == '__main__'):
-    fname = "benchmark-grids/1-2.txt"
-    grid,start,goal = np.array(generate.loadFromFile(fname))
-
     uc = UniformCost()
     astar = AStar()
     asw = AStar()
     man = Manhattan()
 
-    print(uc.search(grid,start,goal))
-
-    print(uc.expandedCount)
-    print(uc.pathCost)
-    # uc.writeToFile(fname)
-    print(astar.search(grid, start, goal, weight=1))
-    print(astar.expandedCount)
-    print(astar.pathCost)
-    # astar.writeToFile(fname)
-    print(asw.search(grid, start, goal, weight=2.5))
-    print(asw.expandedCount)
-    print(asw.pathCost)
-    # asw.writeToFile(fname, "grids/gridsol.txt")
-    print(man.search(grid, start, goal, weight=1))
-    print(man.expandedCount)
-    print(man.pathCost)
-
-    adm = Admissible()
-    print(adm.search(grid, start, goal, weight=1))
-    print(adm.expandedCount)
-    print(adm.pathCost)
-
-    cust1 = Custom1()
-    print(cust1.search(grid, start, goal, weight=1))
-    print(cust1.expandedCount)
-    print(cust1.pathCost)
-
-    cust2 = Custom2()
-    print(cust2.search(grid, start, goal, weight=1))
-    print(cust2.expandedCount)
-    print(cust2.pathCost)
-
-    cust3 = Custom3()
-    print(cust3.search(grid, start, goal, weight=1))
-    print(cust3.expandedCount)
-    print(cust3.pathCost)
-
-    benchmark(Custom3)
 
     weights = [0,1,1.5,2.5]
     classes = [Admissible, Manhattan, Custom1, Custom2, Custom3]
