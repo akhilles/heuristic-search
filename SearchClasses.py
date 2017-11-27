@@ -51,9 +51,12 @@ class Custom2(BaseSearch):
         M, N = self.grid.shape[0], self.grid.shape[1]
         return sqrt((M/(M+N))*(v[0] - self.goal[0]) ** 2 + (N/(M+N))*(v[1] - self.goal[1]) ** 2)
 
+class Custom3(BaseSearch):
 
+    def heuristic(self, v):
+        pass
 
-def benchmark(searchClass):
+def benchmark(searchClass, weight=1):
     gridNames = os.listdir("benchmark-grids")
     pathCost = 0
     expandedNodes = 0
@@ -62,11 +65,12 @@ def benchmark(searchClass):
     for name in gridNames:
         print(name + ': ', end='')
         grid,start,goal = np.array(generate.loadFromFile("benchmark-grids/" + name))
-        path = searchClass.search(grid, start, goal)
+        instance = searchClass()
+        path = instance.search(grid, start, goal, weight=weight)
         optimum = max(abs(goal[0]-start[0]), abs(goal[1]-start[1]))
         visitedOptimum += len(path)/optimum
-        pathCost += searchClass.pathCost
-        expandedNodes += searchClass.expandedCount
+        pathCost += instance.pathCost
+        expandedNodes += instance.expandedCount
     endTime = time.time()
     print('average path cost:      ', pathCost/50)
     print('average expanded nodes: ', expandedNodes/50)
@@ -113,3 +117,6 @@ if(__name__ == '__main__'):
     print(cust2.search(grid, start, goal, weight=1))
     print(cust2.expandedCount)
     print(cust2.pathCost)
+
+    weights = [0,1.25,2.5]
+    classes = []
