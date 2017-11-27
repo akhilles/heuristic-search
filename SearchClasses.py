@@ -33,8 +33,23 @@ class Manhattan(BaseSearch):
     def heuristic(self,v):
         return abs((v[0] - self.goal[0])) + abs((v[1] - self.goal[1]))
 
-def d2Heur(v, goal):
-    return sqrt((v[0] - goal[0]) ** 2 + (v[1] - goal[1]) ** 2)
+class Admissible(BaseSearch):
+
+    def heuristic(self, v):
+        return 0.25*(abs((v[0] - self.goal[0])) + abs((v[1] - self.goal[1])))
+
+class Custom1(BaseSearch):
+
+    def heuristic(self, v):
+        M, N = self.grid.shape[0], self.grid.shape[1]
+        return abs((v[0] - self.goal[0]))*(M/(M+N)) + abs((v[1] - self.goal[1]))*(N/(M+N))
+
+class Custom2(BaseSearch):
+
+    def heuristic(self, v):
+        M, N = self.grid.shape[0], self.grid.shape[1]
+        return sqrt((M/(M+N))*(v[0] - self.goal[0]) ** 2 + (N/(M+N))*(v[1] - self.goal[1]) ** 2)
+
 
 
 def benchmark():
@@ -52,7 +67,7 @@ def benchmark():
     print('average path length:', pathLength/50)
 
 if(__name__ == '__main__'):
-    fname = "grids/1-1.txt"
+    fname = "benchmark-grids/2-8.txt"
     grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
@@ -64,11 +79,11 @@ if(__name__ == '__main__'):
 
     print(uc.expandedCount)
     print(uc.pathCost)
-    uc.writeToFile(fname)
+    # uc.writeToFile(fname)
     print(astar.search(grid, start, goal, weight=1))
     print(astar.expandedCount)
     print(astar.pathCost)
-    # astar.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+    # astar.writeToFile(fname)
     print(asw.search(grid, start, goal, weight=2.5))
     print(asw.expandedCount)
     print(asw.pathCost)
@@ -76,9 +91,18 @@ if(__name__ == '__main__'):
     print(man.search(grid, start, goal, weight=1))
     print(man.expandedCount)
     print(man.pathCost)
-    #
-    # fname = "benchmark-grids/4-8.txt"
-    # grid, start, goal = np.array(generate.loadFromFile(fname))
-    # print(uc.search(grid, start, goal))
-    #
-    # uc.writeToFile(fname, "benchmark-grids/1-2sol.txt")
+
+    adm = Admissible()
+    print(adm.search(grid, start, goal, weight=1))
+    print(adm.expandedCount)
+    print(adm.pathCost)
+
+    cust1 = Custom1()
+    print(cust1.search(grid, start, goal, weight=1))
+    print(cust1.expandedCount)
+    print(cust1.pathCost)
+
+    cust2 = Custom2()
+    print(cust2.search(grid, start, goal, weight=1))
+    print(cust2.expandedCount)
+    print(cust2.pathCost)
