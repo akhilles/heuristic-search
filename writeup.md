@@ -155,9 +155,67 @@ weighted at 1.5. Custom1 performs similarly, but slightly worse. The Custom3 heu
 with A*, but is very unoptimal with the weighted search.
 
 ## g)
+NOTE: The experiment here was run on a much slower laptop with a dual core laptop running
+at 1.8 Ghz (at 2.5 Ghz turbo during experiment), as opposed to the previous experiment, which 
+was run on a quad core processor clocked at around 4 Ghz.
+
+```
+- Sequential, w1: 1 w2: 1
+average path cost:       111.84385927461732
+average expanded nodes:  13533.02
+average run time:        3.1547413301467895
+average visited/optimum: 1.481836334744668
+- Sequential, w1: 1 w2: 1.2
+average path cost:       112.0085396489327
+average expanded nodes:  17744.68
+average run time:        4.274209499359131
+average visited/optimum: 1.4746543021389815
+- Sequential, w1: 1 w2: 1.5
+average path cost:       116.9803224716757
+average expanded nodes:  19239.04
+average run time:        4.484409561157227
+average visited/optimum: 1.4167194276142416
+- Sequential, w1: 1.5 w2: 1
+average path cost:       112.02028063085463
+average expanded nodes:  7849.54
+average run time:        1.8071447658538817
+average visited/optimum: 1.4807034067708518
+- Sequential, w1: 1.5 w2: 1.2
+average path cost:       112.51422507388192
+average expanded nodes:  8735.8
+average run time:        2.224102749824524
+average visited/optimum: 1.4599195108502503
+- Sequential, w1: 1.5 w2: 1.5
+average path cost:       122.83878493810467
+average expanded nodes:  8562.22
+average run time:        2.0019946670532227
+average visited/optimum: 1.3009197583383183
+- Sequential, w1: 2 w2: 1
+average path cost:       112.6952488785469
+average expanded nodes:  5403.66
+average run time:        1.4194062757492065
+average visited/optimum: 1.4342973164708794
+- Sequential, w1: 2 w2: 1.2
+average path cost:       112.7615230485266
+average expanded nodes:  5553.5
+average run time:        1.45022723197937
+average visited/optimum: 1.4342973164708794
+- Sequential, w1: 2 w2: 1.5
+average path cost:       116.08156272296823
+average expanded nodes:  5483.4
+average run time:        1.4014669179916381
+average visited/optimum: 1.3772204126993024
+
+```
 
 
 ## h)
-
-
-## i)
+The implementation of sequential A* search was indeed much more efficient than
+the more straightforward, single-heuristic approaches. Note that the average time
+statistic is misleading as the sequential search was run on a much weaker processor.
+But looking at the number of overall expanded nodes, the sequential search is much more
+efficient that the simpler searches. The sequential search run with w1 = 2 and w2 = 1,
+has an average path cost of around 112.7, less than 1 point higher than the actual optimum
+of 111.8. But the number of expanded nodes is vastly fewer, at 5400, as opposed to the over 100,000
+expanded by uniform cost search. The search is very efficient since all of the checks and calls
+are O(1) due to the use of grids instead of lists.

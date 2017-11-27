@@ -20,13 +20,13 @@ class BaseSearch:
         self.expandedCount = 0
         self.path = None
         self.pathCost = 0
+        self.visited = None
 
     def search(self, grid, start, goal, weight=1):
         self.grid= np.array(grid)
         self.fringe = Fringe()
         self.goal = goal
         self.start = start
-        self.settings()
         self.w = weight
         self.expandedCount = 0
         self.path = None

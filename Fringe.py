@@ -21,6 +21,9 @@ class Fringe():
         self.count -=1
         return heappop(self.h)[2]
 
+    def minkey(self):
+        return self.h[0][0]
+
     def remove(self, value):
         item = None
         for i in self.h:
@@ -29,6 +32,9 @@ class Fringe():
         self.h.remove(item)
         heapify(self.h)
         self.count -=1
+
+    def top(self):
+        return self.h[0][2]
 
     # def update(self, value, priority):
     #     i = self.h.index(value)
