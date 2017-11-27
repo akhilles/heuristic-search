@@ -54,7 +54,7 @@ class Custom2(BaseSearch):
 class Custom3(BaseSearch):
 
     def heuristic(self, v):
-        pass
+        return max(abs((v[0] - self.goal[0])) , abs((v[1] - self.goal[1])))
 
 def benchmark(searchClass, weight=1):
     gridNames = os.listdir("benchmark-grids")
@@ -78,7 +78,7 @@ def benchmark(searchClass, weight=1):
     print('average visited/optimum:', visitedOptimum/50)
 
 if(__name__ == '__main__'):
-    fname = "benchmark-grids/2-8.txt"
+    fname = "benchmark-grids/1-2.txt"
     grid,start,goal = np.array(generate.loadFromFile(fname))
 
     uc = UniformCost()
@@ -118,5 +118,16 @@ if(__name__ == '__main__'):
     print(cust2.expandedCount)
     print(cust2.pathCost)
 
-    weights = [0,1.25,2.5]
-    classes = []
+    cust3 = Custom3()
+    print(cust3.search(grid, start, goal, weight=1))
+    print(cust3.expandedCount)
+    print(cust3.pathCost)
+
+    benchmark(Custom3)
+
+    weights = [0,1,1.5,2.5]
+    classes = [Admissible, Manhattan, Custom1, Custom2, Custom3]
+
+    for c in classes:
+        for w in weights:
+            benchmark(c,w)
